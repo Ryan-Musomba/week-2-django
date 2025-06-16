@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PhotoApp{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <nav>
+        <div class="container nav-container">
+            <a href="{% url 'home' %}" class="logo">PhotoApp</a>
+            <div class="nav-links">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'home' %}" class="nav-link">Home</a>
+                    <a href="{% url 'photo_upload' %}" class="nav-link">Upload</a>
+                    <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
+                    <span style="color:#aaa;">{{ user.full_name }}</span>
+                    <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+                {% else %}
+                    <a href="{% url 'home' %}" class="nav-link">Home</a>
+                    <a href="{% url 'login' %}" class="nav-link">Login</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
+    <main class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+    <footer>
+        <p>© 2025 PhotoApp. All rights reserved.</p>
+    </footer>
+</body>
+</html>

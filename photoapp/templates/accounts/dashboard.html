@@ -1,0 +1,31 @@
+{% extends 'accounts/base.html' %}  <!-- Changed from base.html -->
+{% block title %}Dashboard - PhotoApp{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold mb-4 text-gray-800">Your Profile</h2>
+    {% if request.user.get_profile_picture_url %}
+        <img src="{{ request.user.get_profile_picture_url }}" alt="Profile Picture" class="w-24 h-24 rounded-full mb-4">
+    {% endif %}
+    <p class="mb-2"><strong>Email:</strong> {{ request.user.email }}</p>
+    <p class="mb-2"><strong>Full Name:</strong> {{ request.user.full_name }}</p>
+    <p class="mb-2"><strong>Bio:</strong> {{ request.user.bio|default:"No bio provided" }}</p>
+    <a href="{% url 'profile_update' %}" class="text-blue-600 hover:underline mb-4 block">Edit Profile</a>
+    <h3 class="text-xl font-semibold mt-6 mb-4 text-gray-800">Change Password</h3>
+    <form method="post" action="{% url 'change_password' %}" class="space-y-4">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <p class="text-red-600 text-sm">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Change Password</button>
+    </form>
+</div>
+{% endblock %}

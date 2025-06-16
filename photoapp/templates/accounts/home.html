@@ -1,0 +1,31 @@
+{% extends 'accounts/base.html' %}
+{% block title %}Photo Gallery{% endblock %}
+
+{% block content %}
+<h2>Photo Gallery</h2>
+
+
+<div class="photo-grid">
+    {% for photo in photos %}
+        <div class="card">
+            <a href="{% url 'photo_detail' photo.pk %}">
+                <img src="{{ photo.get_image_url }}" alt="{{ photo.title }}" class="card-img">
+            </a>
+            <div class="card-body">
+                <h3 class="card-title">{{ photo.title }}</h3>
+                <p class="card-text">{{ photo.description|truncatewords:10 }}</p>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span class="card-text">{{ photo.likes.count }} Like{{ photo.likes.count|pluralize }}</span>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'photo_like' photo.pk %}" class="text-primary">
+                            {% if user in photo.likes.all %}Unlike{% else %}Like{% endif %}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p style="color:#aaa;">No photos available.</p>
+    {% endfor %}
+</div>
+{% endblock %}

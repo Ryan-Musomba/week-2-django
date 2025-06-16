@@ -1,0 +1,26 @@
+{% extends 'accounts/base.html' %}  
+{% block title %}Register - PhotoApp{% endblock %}  <!-- Changed from Register -->
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold mb-4 text-gray-800">Register</h2>
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <p class="text-red-600 text-sm">{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Register</button>
+    </form>
+    <p class="mt-4 text-center text-gray-600">
+        Already have an account? <a href="{% url 'login' %}" class="text-blue-600 hover:underline">Login</a>
+    </p>
+</div>
+{% endblock %}
